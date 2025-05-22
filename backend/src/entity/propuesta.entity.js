@@ -32,8 +32,30 @@ const PropuestaSchema = new EntitySchema({
             type: "date",
             default: () => "CURRENT_TIMESTAMP"
         }
+    },
+
+    relations: {
+    creador: {
+      type: "many-to-one",
+      target: "User",
+      joinColumn: {
+        name: "rut_creador",
+        referencedColumnName: "rut"
+      },
+      nullable: false
+    },
+    espacio: {
+      type: "many-to-one",
+      target: "Espacio",
+      nullable: true
+    },
+    aprobaciones: {
+      type: "one-to-many",
+      target: "Aprobacion",
+      inverseSide: "propuesta"
+    }
     }
 });
 
-export default PropuestaSchema
+export default PropuestaSchema;
 

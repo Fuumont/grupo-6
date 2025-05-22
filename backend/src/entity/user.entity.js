@@ -48,6 +48,19 @@ const UserSchema = new EntitySchema({
       nullable: false,
     },
   },
+    relations: {
+    propuestas: {
+      type: "one-to-many",
+      target: "Propuesta",
+      inverseSide: "creador"
+    },
+    aprobaciones: {
+      type: "one-to-many",
+      target: "Aprobacion",
+      inverseSide: "usuario"
+    }
+  },
+  
   indices: [
     {
       name: "IDX_USER",
