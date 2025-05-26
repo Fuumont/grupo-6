@@ -2,7 +2,6 @@
 import AprobacionSchema from "../entity/aprobacion.entity.js";
 import PropuestaSchema from "../entity/propuesta.entity.js";
 import UserSchema from "../entity/user.entity.js";
-import { AppDataSource } from "../data-source.js";
 
 
 // obtener todas las aprobaciones tampoco se si sera util xd
@@ -108,17 +107,17 @@ export async function verificarUnanimidadAprobacionesService(propuestaId) {
         const aprobacionRepository = AppDataSource.getRepository(AprobacionSchema);
         const propuestaRepository = AppDataSource.getRepository(PropuestaSchema);
         
-        // Obtener todos los miembros del CCAA con roles directivos
+        // Obtener todos los miembros del CCAA con roles directivos (no hay usuarios con estos roles aun)
         const miembrosDirectivos = await AppDataSource.getRepository(UserSchema).find({
             where: { rol: In(["Presidente", "Vicepresidente", "Tesorero", "Secretario"]) }
         });
 
-        // Obtener todas las aprobaciones de la propuesta
+        // Obtener todas las aprobaciones de la propuesta (deberia)
         const aprobaciones = await aprobacionRepository.find({
             where: { propuestaId: propuestaId }
         });
 
-        // Verificar unanimidad
+        // Verificar unanimidad hell yeah
         const todosAprobaron = miembrosDirectivos.every(miembro => 
             aprobaciones.some(aprob => 
                 aprob.rut_usuario === miembro.rut && aprob.voto === true

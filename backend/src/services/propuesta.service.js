@@ -1,5 +1,5 @@
 "use strict";
-import PropuestaSchema from "../entity/propuesta.entity";
+import PropuestaSchema from "../entity/propuesta.entity.js";
 
 // obtener todas las propuestas
 export async function getPropuestaService(){
@@ -51,6 +51,7 @@ export async function createPropuestaService(body){
     }
 }
 
+// Actualizar propuesta (se va a usar mas que nada para que el presindente actualice el estado)
 export async function updatePropuestaService(id, body){
     try{
         const propuestaRepository = AppDataSource.getRepository(PropuestaSchema);
@@ -63,7 +64,7 @@ export async function updatePropuestaService(id, body){
         return [null, "Error interno del servidor"];
     }
 }
-
+// Elimina una propuesta
 export async function deletePropuestaService(id){
     try{
         const propuestaRepository = AppDataSource.getRepository(PropuestaSchema);

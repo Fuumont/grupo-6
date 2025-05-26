@@ -21,14 +21,6 @@ export const AprobacionSchema = new EntitySchema({
     fecha_voto: {
       type: "timestamp",
       default: () => "CURRENT_TIMESTAMP"
-    },
-
-    propuestaId: {
-      type: "int"
-    },
-    rut_usuario: {
-      type: "varchar",
-      length: 12
     }
   },
   relations: {
@@ -54,3 +46,5 @@ export const AprobacionSchema = new EntitySchema({
     }
   }
 });
+
+export default AprobacionSchema;

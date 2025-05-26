@@ -1,6 +1,7 @@
 "use strict";
 import EspacioSchema from "../entity/espacio.entity.js";
 
+//  Obtiene todos los espacios
 export async function getEspacioService() {
     try {
         const espacioRepository = AppDataSource.getRepository(EspacioSchema);
@@ -13,6 +14,7 @@ export async function getEspacioService() {
     }
 }
 
+// Obtiene 1 espacio por su id
 export async function getEspacioByIdService(id) {
     try {
         const espacioRepository = AppDataSource.getRepository(EspacioSchema);
@@ -25,6 +27,7 @@ export async function getEspacioByIdService(id) {
     }
 }
 
+// Crea un espacio
 export async function createEspacioService(body) {
     try {
         const espacioRepository = AppDataSource.getRepository(EspacioSchema);
@@ -36,7 +39,7 @@ export async function createEspacioService(body) {
         return [null, "Error interno del servidor"];
     }
 }
-
+// Actualiza un espacio
 export async function updateEspacioService(id, body) {
     try {
         const espacioRepository = AppDataSource.getRepository(EspacioSchema);
@@ -50,6 +53,7 @@ export async function updateEspacioService(id, body) {
     }
 }   
 
+// Elimina un espacio
 export async function deleteEspacioService(id) { 
     try {
         const espacioRepository = AppDataSource.getRepository(EspacioSchema);
