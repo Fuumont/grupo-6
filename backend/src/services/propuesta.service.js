@@ -1,11 +1,28 @@
 "use strict";
 import PropuestaSchema from "../entity/propuesta.entity.js";
+import UserSchema from "../entity/user.entity.js";
+import { AppDataSource } from "../config/configDb.js";
 
-// obtener todas las propuestas
+// obtener todas las propuestas junto con los datos del creador
 export async function getPropuestaService(){
     try{
         const propuestaRepository = AppDataSource.getRepository(PropuestaSchema);
-        const propuestas = await propuestaRepository.find();
+        const propuestas = await propuestaRepository.find({
+            relations: ["creador"],
+            select: {
+                id: true,
+                nombre_actividad: true,
+                objetivo: true,
+                fecha_propuesta: true,
+                estado: true,
+                fecha_creacion: true,
+                creador: {
+                    rut: true,
+                    nombreCompleto: true,
+                    rol: true
+                }
+            }
+        });
         if (!propuestas || propuestas.length === 0) return [null, "No hay propuestas registradas"];
         return [propuestas, null];
     }catch(error){
@@ -14,23 +31,17 @@ export async function getPropuestaService(){
     }
 }
 
-// obtener una propuesta por rut del usuario
-export async function getMyPropuestasService(rut){
-    try{
-        const propuestaRepository = AppDataSource.getRepository(PropuestaSchema);
-        const propuestas = await propuestaRepository.find({ where: { rut_creador: rut } });
-        if (!propuestas || propuestas.length === 0) return [null, "No hay propuestas registradas por este usuario"];
-        return [propuestas, null];
-    }catch(error){
-        console.error("Error al obtener las propuestas:", error);
-        return [null, "Error interno del servidor"];
-    }
-}
-
+// obtener una propuesta por id
 export async function getPropuestaByIdService(id){
     try{
         const propuestaRepository = AppDataSource.getRepository(PropuestaSchema);
-        const propuesta = await propuestaRepository.findOne({ where: { id: id } });
+        const propuesta = await propuestaRepository.findOne({ where: { id: id }, relations: ["creador"],
+        select: {
+            creador: {
+                    rut: true,
+                    nombreCompleto: true,
+                    rol: true
+                } } });
         if (!propuesta) return [null, "No hay propuestas registradas con este id"];
         return [propuesta, null];
     }catch(error){
@@ -42,7 +53,17 @@ export async function getPropuestaByIdService(id){
 export async function createPropuestaService(body){
     try{
         const propuestaRepository = AppDataSource.getRepository(PropuestaSchema);
-        const propuesta = propuestaRepository.create(body);
+        const userRepository = AppDataSource.getRepository(UserSchema);
+
+        // busca el rut en la bd
+        const creador = await userRepository.findOne({ where: { rut: body.rutCreador } });
+        if (!creador) return [null, "El usuario creador no existe"];
+
+        // crea la propuesta y asigna el usuario
+        const propuesta = propuestaRepository.create({
+            ...body,
+            creador: creador
+        });
         const propuestaSaved = await propuestaRepository.save(propuesta);
         return [propuestaSaved, null];
     }catch(error){
@@ -51,7 +72,7 @@ export async function createPropuestaService(body){
     }
 }
 
-// Actualizar propuesta (se va a usar mas que nada para que el presindente actualice el estado)
+// actualizar propuesta (se va a usar mas que nada para que el presindente actualice el estado)
 export async function updatePropuestaService(id, body){
     try{
         const propuestaRepository = AppDataSource.getRepository(PropuestaSchema);
@@ -64,7 +85,7 @@ export async function updatePropuestaService(id, body){
         return [null, "Error interno del servidor"];
     }
 }
-// Elimina una propuesta
+// elimina una propuesta
 export async function deletePropuestaService(id){
     try{
         const propuestaRepository = AppDataSource.getRepository(PropuestaSchema);

@@ -1,5 +1,5 @@
 "use strict";
-import { EntitySchema, EntitySchemaOptions } from "typeorm";
+import { EntitySchema } from "typeorm";
 
 export const AprobacionSchema = new EntitySchema({
   name: "Aprobacion",
@@ -23,26 +23,19 @@ export const AprobacionSchema = new EntitySchema({
       default: () => "CURRENT_TIMESTAMP"
     }
   },
+
   relations: {
     propuesta: {
       type: "many-to-one",
       target: "Propuesta",
-      joinColumn: {
-        name: "propuestaId",
-        referencedColumnName: "id"
-      },
+      joinColumn: "propuestaId",
       nullable: false
     },
     usuario: {
       type: "many-to-one",
-      target: "User", 
-      joinColumn: {
-        name: "rut_usuario",
-        referencedColumnName: "rut"
-      },
-      nullable: false,
-
-      createForeignKeyConstraints: true
+      target: "User",
+      joinColumn: "rutUsuario",
+      nullable: false
     }
   }
 });

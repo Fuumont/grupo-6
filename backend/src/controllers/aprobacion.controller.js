@@ -5,7 +5,6 @@ import {
     getAprobacionByIdService,
     getAprobacionesByPropuestaIdService,
     getAprobacionService,
-    getMyAprobacionesService,
     updateAprobacionService,
 } from "../services/aprobacion.service.js";
 
@@ -20,24 +19,6 @@ import {
 export async function getAprobaciones(req, res) {
     try {
         const [aprobaciones, errorAprobaciones] = await getAprobacionService();
-
-        if (errorAprobaciones) return handleErrorClient(res, 404, errorAprobaciones);
-
-        aprobaciones.length === 0
-            ? handleSuccess(res, 204)
-            : handleSuccess(res, 200, "Aprobaciones encontradas", aprobaciones);
-    } catch (error) {
-        handleErrorServer(res, 500, error.message);
-    }
-}
-
-// Controller para obtener aprobaciones por rut del usuario
-
-export async function getMyAprobaciones(req, res) {
-    try {
-        const { rut } = req.query;
-
-        const [aprobaciones, errorAprobaciones] = await getMyAprobacionesService(rut);
 
         if (errorAprobaciones) return handleErrorClient(res, 404, errorAprobaciones);
 

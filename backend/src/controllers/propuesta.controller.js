@@ -2,7 +2,6 @@
 import {
     createPropuestaService,
     deletePropuestaService,
-    getMyPropuestasService,
     getPropuestaByIdService,
     getPropuestaService,
     updatePropuestaService,
@@ -29,22 +28,6 @@ export async function getPropuestas(req, res) {
     }
 }
 
-// Controller de get propuestas por rut
-export async function getMyPropuestas(req, res) {
-    try {
-        const { rut } = req.query;
-
-        const [propuestas, errorPropuestas] = await getMyPropuestasService(rut);
-
-        if (errorPropuestas) return handleErrorClient(res, 404, errorPropuestas);
-
-        propuestas.length === 0
-            ? handleSuccess(res, 204)
-            : handleSuccess(res, 200, "Propuestas encontradas", propuestas);
-    } catch (error) {
-        handleErrorServer(res, 500, error.message);
-    }
-}
 
 // Controller de get propuestas por id
 export async function getPropuestaById(req, res) {

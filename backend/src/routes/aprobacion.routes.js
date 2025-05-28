@@ -7,7 +7,6 @@ import {
     getAprobacionById,
     getAprobaciones,
     getAprobacionesByPropuestaId,
-    getMyAprobaciones,
     updateAprobacion,
 } from "../controllers/aprobacion.controller.js";
 
@@ -15,7 +14,6 @@ const router = Router();
 router
     .use(authenticateJwt)
     .get("/", getAprobaciones)
-    .get("/my", getMyAprobaciones)
     .get("/:id", getAprobacionById)
     .get("/propuesta/:id", getAprobacionesByPropuestaId)
     .post("/", createAprobacion)

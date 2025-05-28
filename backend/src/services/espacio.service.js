@@ -1,5 +1,6 @@
 "use strict";
 import EspacioSchema from "../entity/espacio.entity.js";
+import { AppDataSource } from "../config/configDb.js";
 
 //  Obtiene todos los espacios
 export async function getEspacioService() {

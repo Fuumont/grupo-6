@@ -39,7 +39,7 @@ const PropuestaSchema = new EntitySchema({
       type: "many-to-one",
       target: "User",
       joinColumn: {
-        name: "rut_creador",
+        name: "rutCreador",
         referencedColumnName: "rut"
       },
       nullable: false
