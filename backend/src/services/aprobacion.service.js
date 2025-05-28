@@ -1,7 +1,5 @@
 "use strict";
 import AprobacionSchema from "../entity/aprobacion.entity.js";
-import PropuestaSchema from "../entity/propuesta.entity.js";
-import UserSchema from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 
 
@@ -83,7 +81,7 @@ export async function getAprobacionByIdService(id) {
                     estado: true,
                 },
             }  });
-            
+
         if (!aprobacion) return [null, "No hay aprobaciones registradas con este id"];
         return [aprobacion, null];
     } catch (error) {
