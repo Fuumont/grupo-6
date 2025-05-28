@@ -74,6 +74,15 @@ async function createUsers() {
           rol: "usuario",
         }),
       ),
+      userRepository.save(
+        userRepository.create({
+          nombreCompleto: "Iván Leonardo Salas Molina",
+          rut: "20.791.130-5",
+          email: "usuario7.2025@gmail.cl",
+          password: await encryptPassword("user1234"),
+          rol: "tesorero",
+        }),
+      ),
     ]);
     console.log("* => Usuarios creados exitosamente");
   } catch (error) {
