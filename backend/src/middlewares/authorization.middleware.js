@@ -38,3 +38,30 @@ try {
     );
 }
 }
+
+export async function isDirectivo(req, res, next ) {
+
+    try{
+        const userRepository = AppDataSource.getRepository(User);
+
+        const userFound = userRepository.findOneBy({ email: req.user.email })
+
+        if(!userFound)
+        {
+            return handleErrorClient(res, 404, "Usuario no encontrado", );
+        }
+
+        const rolDirectivo = userFound.rol;
+
+        if(rolDirectivo == false)
+        {
+            return handleErrorClient(res, 403, "Se requiere ser parte de la directiva para realizar esta acción");
+        }
+
+        next();
+
+    } catch (error){
+        handleErrorServer(res, 500, error.message, );
+    }
+    
+}

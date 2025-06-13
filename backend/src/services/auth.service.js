@@ -34,6 +34,7 @@ export async function loginService(user) {
       email: userFound.email,
       rut: userFound.rut,
       rol: userFound.rol,
+      directivo: userFound.directivo,
     };
 
     const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, {
@@ -52,7 +53,7 @@ export async function registerService(user) {
   try {
     const userRepository = AppDataSource.getRepository(User);
 
-    const { nombreCompleto, rut, email } = user;
+    const { nombreCompleto, rut, email, rol, directivo } = user;
 
     const createErrorMessage = (dataInfo, message) => ({
       dataInfo,
@@ -80,7 +81,8 @@ export async function registerService(user) {
       email,
       rut,
       password: await encryptPassword(user.password),
-      rol: "usuario",
+      rol,
+      directivo,
     });
 
     await userRepository.save(newUser);

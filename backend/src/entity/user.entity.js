@@ -32,6 +32,11 @@ const UserSchema = new EntitySchema({
       length: 50,
       nullable: false,
     },
+    directivo: {
+      type: "boolean",
+      default: false,
+      nullable: false
+    },
     password: {
       type: "varchar",
       nullable: false,

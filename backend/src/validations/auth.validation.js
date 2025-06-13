@@ -95,6 +95,21 @@ export const registerValidation = Joi.object({
       "string.max": "La contraseña debe tener como máximo 26 caracteres.",
       "string.pattern.base": "La contraseña solo puede contener letras y números.",
     }),
+    rol: Joi.string()
+    .min(8)
+    .max(26)
+    .pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)
+    .required()
+    .messages({
+      "string.empty": "El rol no puede estar vacío.",
+      "any.required": "El rol es obligatorio.",
+      "string.base": "El rol debe ser de tipo texto.",
+      "string.min": "El rol debe tener al menos 8 caracteres.",
+      "string.max": "El rol debe tener como máximo 526 caracteres.",
+      "string.pattern.base": "El rol solo puede contener letras y espacios.",
+    }),
+
+    directivo: Joi.boolean().required()
 })
   .unknown(false)
   .messages({
