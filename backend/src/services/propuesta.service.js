@@ -8,7 +8,7 @@ export async function getPropuestaService(){
     try{
         const propuestaRepository = AppDataSource.getRepository(PropuestaSchema);
         const propuestas = await propuestaRepository.find({
-            relations: ["creador"],
+            relations: ["creador", "espacio"],
             select: {
                 id: true,
                 nombre_actividad: true,
@@ -20,7 +20,13 @@ export async function getPropuestaService(){
                     rut: true,
                     nombreCompleto: true,
                     rol: true
-                }
+                },
+                espacio: {
+                    nombre: true,
+                    capacidad: true,
+                    horario_disponible: true,
+                    dias_disponibles: true
+                },
             }
         });
         if (!propuestas || propuestas.length === 0) return [null, "No hay propuestas registradas"];
@@ -35,12 +41,18 @@ export async function getPropuestaService(){
 export async function getPropuestaByIdService(id){
     try{
         const propuestaRepository = AppDataSource.getRepository(PropuestaSchema);
-        const propuesta = await propuestaRepository.findOne({ where: { id: id }, relations: ["creador"],
+        const propuesta = await propuestaRepository.findOne({ where: { id: id }, relations: ["creador", "espacio"],
         select: {
             creador: {
                     rut: true,
                     nombreCompleto: true,
                     rol: true
+                },
+            espacio: {
+                    nombre: true,
+                    capacidad: true,
+                    horario_disponible: true,
+                    dias_disponibles: true
                 } } });
         if (!propuesta) return [null, "No hay propuestas registradas con este id"];
         return [propuesta, null];
@@ -59,11 +71,17 @@ export async function createPropuestaService(body){
         const creador = await userRepository.findOne({ where: { rut: body.rutCreador } });
         if (!creador) return [null, "El usuario creador no existe"];
 
-        // crea la propuesta y asigna el usuario
+        // busca el espacio en la bd
+        const espacio = await userRepository.findOne({ where: { id: body.Espacio } });
+        if (!espacio) return [null, "No se encontro el espacio"];
+
+        // Asigna el usuario y el espacio
         const propuesta = propuestaRepository.create({
             ...body,
-            creador: creador
+            creador: creador,
+            espacio: espacio
         });
+
         const propuestaSaved = await propuestaRepository.save(propuesta);
         return [propuestaSaved, null];
     }catch(error){
