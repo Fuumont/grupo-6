@@ -16,6 +16,7 @@ export async function getPropuestaService(){
                 fecha_propuesta: true,
                 estado: true,
                 fecha_creacion: true,
+                estado_dde: true,
                 creador: {
                     rut: true,
                     nombreCompleto: true,

@@ -28,6 +28,11 @@ const PropuestaSchema = new EntitySchema({
             default: "Borrador",
             enum: ["Borrador", "Pendiente", "Aprobada Internamente", "Enviada a DDE", "Aprobada por DEE", "Rechazada"]
         },
+        estado_dde: {
+          type: "boolean",
+          default: false,
+          nullable: false
+        },
         fecha_creacion: {
             type: "date",
             default: () => "CURRENT_TIMESTAMP"
