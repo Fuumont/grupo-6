@@ -70,7 +70,9 @@ export async function createAprobacion(req, res) {
     try {
         const { body } = req;
 
-        const [aprobacion, errorAprobacion] = await createAprobacionService(body);
+        const user = req.user.id;
+
+        const [aprobacion, errorAprobacion] = await createAprobacionService(body, user);
 
         if (errorAprobacion) return handleErrorClient(res, 400, errorAprobacion);
 

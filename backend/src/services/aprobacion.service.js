@@ -1,5 +1,7 @@
 "use strict";
 import AprobacionSchema from "../entity/aprobacion.entity.js";
+import PropuestaSchema from "../entity/propuesta.entity.js";
+import UserSchema from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 
 
@@ -90,10 +92,25 @@ export async function getAprobacionByIdService(id) {
     }
 }
 // crear una aprobacion
-export async function createAprobacionService(body) {
+export async function createAprobacionService(body, user) {
     try {
+        const userRepository = AppDataSource.getRepository(UserSchema);
         const aprobacionRepository = AppDataSource.getRepository(AprobacionSchema);
-        const aprobacion = aprobacionRepository.create(body);
+        const propuestaRepository = AppDataSource.getRepository(PropuestaSchema);
+
+        // comprueba si existe el usuario en la db
+        const usuario = await userRepository.findOne({ where: { id: user } });
+        if (!usuario) return [null, "El usuario votante no existe"];
+
+        // comprueba si existe la propuesta en la db
+        const propuesta = await propuestaRepository.findOne({ where: { id: body.propuesta } });
+        if (!propuesta || propuesta.length === 0) return [null, "La propuesta no existe"];
+
+        const aprobacion = aprobacionRepository.create({
+            ...body,
+            propuesta: propuesta,
+            usuario: usuario
+        });
         const aprobacionSaved = await aprobacionRepository.save(aprobacion);
 
         return [aprobacionSaved, null];

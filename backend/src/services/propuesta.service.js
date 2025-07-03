@@ -1,6 +1,7 @@
 "use strict";
 import PropuestaSchema from "../entity/propuesta.entity.js";
 import UserSchema from "../entity/user.entity.js";
+import EspacioSchema from "../entity/espacio.entity.js"
 import { AppDataSource } from "../config/configDb.js";
 
 // obtener todas las propuestas junto con los datos del creador
@@ -63,20 +64,39 @@ export async function getPropuestaByIdService(id){
     }
 }
 // crear propuesta
-export async function createPropuestaService(body){
+export async function createPropuestaService(body, rutSesion){
     try{
+
+   
+        const hoy = new Date();
+        hoy.setHours(0,0,0,0);
+        const fechaPropuesta = new Date(body.fecha_propuesta);
+        fechaPropuesta.setHours(0,0,0,0);
+
+
+        const fechaMaxima = new Date(hoy);
+        fechaMaxima.setMonth(fechaMaxima.getMonth() + 1);
+
+        if (fechaPropuesta < hoy)
+            return [null, "La fecha de la propuesta no puede ser menor a la fecha actual"];
+        if (fechaPropuesta > fechaMaxima)
+            return [null, "La fecha de la propuesta no puede ser mayor a un mes desde hoy"];
+
+
         const propuestaRepository = AppDataSource.getRepository(PropuestaSchema);
         const userRepository = AppDataSource.getRepository(UserSchema);
+        const espacioRepository = AppDataSource.getRepository(EspacioSchema);
 
+        
         // busca el rut en la bd
-        const creador = await userRepository.findOne({ where: { rut: body.rutCreador } });
+        const creador = await userRepository.findOne({ where: { rut: rutSesion } });
         if (!creador) return [null, "El usuario creador no existe"];
 
         // busca el espacio en la bd
-        const espacio = await userRepository.findOne({ where: { id: body.Espacio } });
-        if (!espacio) return [null, "No se encontro el espacio"];
+        const espacio = await espacioRepository.findOne({ where: { id: body.espacio } });
+        if (!espacio || espacio.length === 0) return [null, "No se encontro el espacio"];
 
-        // Asigna el usuario y el espacio
+        // asigna el usuario y el espacio
         const propuesta = propuestaRepository.create({
             ...body,
             creador: creador,

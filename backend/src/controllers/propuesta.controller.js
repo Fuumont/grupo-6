@@ -47,8 +47,9 @@ export async function getPropuestaById(req, res) {
 export async function createPropuesta(req, res) {
     try {
         const { body } = req;
+        const rutSesion = req.user.rut;
 
-        const [propuesta, errorPropuesta] = await createPropuestaService(body);
+        const [propuesta, errorPropuesta] = await createPropuestaService(body, rutSesion);
 
         if (errorPropuesta) return handleErrorClient(res, 404, errorPropuesta);
 
