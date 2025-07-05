@@ -66,6 +66,7 @@ export default function Popup({ show, setShow, data, action }) {
                                 options: [
                                     { value: 'administrador', label: 'Administrador' },
                                     { value: 'usuario', label: 'Usuario' },
+                                    { value: 'tesorero', label: 'Tesorero' },
                                 ],
                                 required: true,
                                 defaultValue: userData.rol || "",

@@ -14,6 +14,7 @@ import {
   handleErrorServer,
   handleSuccess,
 } from "../handlers/responseHandlers.js";
+import { calcularSaldoService } from "../services/movimiento.service.js";
 
 // Crear un nuevo movimiento
 export async function createMovimiento(req, res) {
@@ -45,19 +46,27 @@ export async function createMovimiento(req, res) {
 }
 
 // Obtener todos los movimientos
+// Obtener todos los movimientos
 export async function getMovimientos(req, res) {
   try {
-    const [movimientos, errorMovimientos] = await getMovimientosService();
+    const [resultado, errorMovimientos] = await getMovimientosService();
 
     if (errorMovimientos) return handleErrorClient(res, 404, errorMovimientos);
 
-    movimientos.length === 0
-      ? handleSuccess(res, 204)
-      : handleSuccess(res, 200, "Movimientos encontrados", movimientos);
+    if (!resultado || resultado.movimientos.length === 0) {
+      return handleSuccess(res, 204);
+    }
+
+    return handleSuccess(res, 200, "Movimientos encontrados", {
+      movimientos: resultado.movimientos,
+      saldo: resultado.saldo,
+    });
   } catch (error) {
     handleErrorServer(res, 500, error.message);
   }
 }
+
+
 
 // Obtener un solo movimiento por ID
 export async function getMovimiento(req, res) {
@@ -127,5 +136,20 @@ export async function deleteMovimiento(req, res) {
     handleSuccess(res, 200, "Movimiento eliminado correctamente", movimientoEliminado);
   } catch (error) {
     handleErrorServer(res, 500, error.message);
+  }
+}
+// Obterner el saldo total de todos los movimientos
+export async function getSaldo(req, res) {
+  try {
+    const [saldo, error] = await calcularSaldoService();
+
+    if (error) {
+      return handleErrorClient(res, 404, error);
+    }
+
+    return handleSuccess(res, 200, "Saldo total calculado", { saldo_total: saldo });
+  } catch (error) {
+    console.error("Error al calcular saldo:", error);
+    return handleErrorServer(res, 500, "Error al calcular saldo");
   }
 }

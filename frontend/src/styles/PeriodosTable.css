@@ -1,0 +1,167 @@
+/* Empuja tu tabla hacia abajo para no quedar tapada por el navbar */
+.pt-container {
+  margin-top: 80px;    /* Ajusta 80px al alto de tu navbar */
+  padding: 0 16px;
+}
+
+/* Tabla básica */
+.pt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: sans-serif;
+}
+
+.pt-table th,
+.pt-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.pt-table th {
+  background-color: #003366;
+  color: #fff;
+  text-align: left;
+}
+
+/* Filas alternas */
+.pt-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Mensajes de estado */
+.pt-loading,
+.pt-error {
+  margin-top: 80px;
+  text-align: center;
+  font-style: italic;
+}
+/* Alínea las acciones y separa los botones */
+.pt-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.pt-actions button {
+  padding: 4px 6px;
+  border: none;
+  background: #00509e;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pt-actions button:hover {
+  background: #003366;
+}
+
+/* desplazamiento por el navbar */
+.pt-container {
+  margin-top: 80px;
+  padding: 0 16px;
+}
+
+/* filtros y botón */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.filter-input,
+.filter-select {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* botón primario estilo Users */
+.btn-primary {
+  background: #00509e;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #003366;
+}
+
+/* acciones en tabla */
+.pt-actions {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+/* popup modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  width: 320px;
+}
+
+/* formulario */
+.pt-form label {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.pt-form input[type="text"],
+.pt-form input[type="number"],
+.pt-form input[type="date"] {
+  width: 100%;
+  padding: 6px;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+.pt-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pt-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* estados */
+.pt-loading,
+.pt-error {
+  margin-top: 80px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Iconos azules y tamaño un poco mayor */
+.pt-icon {
+  color: #00509e;
+  font-size: 1.25rem;
+}
+
+/* Ajuste botones acción para que tengan algo de espacio */
+.pt-td-actions .pt-btn {
+  margin-left: 4px;
+}
+
+

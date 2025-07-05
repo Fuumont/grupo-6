@@ -1,0 +1,61 @@
+/* Empuja el contenido para no quedar tapado por el navbar (altura aprox. 64px) */
+.mt-container {
+  padding-top: 80px;
+}
+
+/* (Opcional) Si ya tienes un filtro-bar, añade también margen abajo */
+.mt-container .filter-bar {
+  margin-bottom: 16px;
+}
+
+/* Tabla */
+.mt-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.mt-table th,
+.mt-table td {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+}
+.mt-table th {
+  background: #003366;
+  color: #fff;
+  text-align: left;
+}
+
+/* Zebra stripes */
+.mt-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* Botones de acciones en color azul */
+.mt-table td .btn-icon {
+  background-color: #00509e;
+  border: none;
+  color: #fff;
+  margin: 0 2px;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.mt-table td .btn-icon:hover {
+  background-color: #003366;
+}
+
+/* Iconos (asegúrate de usar react-icons o tus SVG dentro de estos botones) */
+.mt-table td .btn-icon svg {
+  vertical-align: middle;
+  fill: currentColor;
+}
+
+/* Ajustes de responsividad (opcional) */
+@media (max-width: 768px) {
+  .mt-container {
+    padding-top: 100px;
+  }
+  .mt-table th,
+  .mt-table td {
+    padding: 6px 8px;
+  }
+}

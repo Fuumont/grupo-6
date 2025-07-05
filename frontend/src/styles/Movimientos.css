@@ -1,0 +1,95 @@
+/* empuja contenido bajo navbar */
+.mt-container {
+  padding-top: 80px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+/* Título */
+.mt-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 8px;
+  border-bottom: 3px solid #00509e;
+  display: inline-block;
+}
+
+/* Saldo */
+.mt-saldo {
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+}
+
+/* Barra de filtros */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* Inputs y selects más cortos */
+.filter-input,
+.filter-select,
+.date-input {
+  max-width: 200px;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Botón de ordenar */
+.mt-sort-btn {
+  background: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+
+/* Botón crear */
+.mt-create-btn {
+  margin-left: auto;
+}
+
+/* Tabla */
+.mt-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.mt-table th,
+.mt-table td {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+}
+.mt-table th {
+  background: #003366;
+  color: #fff;
+  text-align: left;
+}
+.mt-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* Botones de acción en azul */
+.btn-icon {
+  background-color: #00509e;
+  border: none;
+  color: #fff;
+  margin-right: 4px;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+.btn-icon:hover {
+  background-color: #003366;
+}
+.btn-icon svg {
+  vertical-align: middle;
+  fill: currentColor;
+}

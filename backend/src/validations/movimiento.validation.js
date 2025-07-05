@@ -42,8 +42,7 @@ export const movimientoValidation = Joi.object({
       "date.less": "La fecha no puede ser futura.",
     }),
 
- id_usuario: Joi.any().optional(),
-
+  id_usuario: Joi.any().optional(),
 
   id_actividad: Joi.number()
     .integer()
@@ -51,6 +50,14 @@ export const movimientoValidation = Joi.object({
     .optional()
     .messages({
       "number.base": "El ID de la actividad debe ser un número.",
+    }),
+
+  id_propuesta: Joi.number()
+    .integer()
+    .positive()
+    .optional()
+    .messages({
+      "number.base": "El ID de la propuesta debe ser un número.",
     }),
 
   id_periodo: Joi.number()

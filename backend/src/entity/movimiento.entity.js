@@ -30,12 +30,6 @@ const MovimientoSchema = new EntitySchema({
       type: "date",
       nullable: false,
     },
-    saldo_resultante: {
-      type: "decimal",
-      precision: 10,
-      scale: 2,
-      nullable: true,
-    },
   },
   relations: {
     usuario: {
@@ -45,12 +39,12 @@ const MovimientoSchema = new EntitySchema({
       nullable: false,
       onDelete: "CASCADE",
     },
-    actividad: {
+  propuesta: {
       type: "many-to-one",
-      target: "Actividad",
-      joinColumn: { name: "id_actividad" },
+      target: "Propuesta",
+      joinColumn: true,
       nullable: true,
-    },
+},
     periodo: {
       type: "many-to-one",
       target: "PeriodoAcademico",
