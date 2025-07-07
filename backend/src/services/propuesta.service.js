@@ -67,7 +67,7 @@ export async function getPropuestaByIdService(id){
 export async function createPropuestaService(body, rutSesion){
     try{
 
-   
+        // validacion de la fecha
         const hoy = new Date();
         hoy.setHours(0,0,0,0);
         const fechaPropuesta = new Date(body.fecha_propuesta);

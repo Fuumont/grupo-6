@@ -25,8 +25,8 @@ const PropuestaSchema = new EntitySchema({
         estado: {
             type: "varchar",
             lenght: 30,
-            default: "Borrador",
-            enum: ["Borrador", "Pendiente", "Aprobada Internamente", "Enviada a DDE", "Aprobada por DEE", "Rechazada"]
+            default: "Pendiente",
+            enum: ["Pendiente", "Aprobada Internamente", "Enviada a DDE", "Aprobada por DEE", "Rechazada"]
         },
         estado_dde: {
           type: "boolean",
