@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { logout } from '@services/auth.service.js';
 import '@styles/navbar.css';
@@ -29,20 +29,22 @@ const Navbar = () => {
   };
 
   const removeActiveClass = () => {
-    const activeLinks = document.querySelectorAll(
-      ".nav-menu ul li a.active"
-    );
-    activeLinks.forEach((link) => link.classList.remove("active"));
+    document
+      .querySelectorAll(".nav-menu ul li a.active")
+      .forEach((link) => link.classList.remove("active"));
   };
 
   const addActiveClass = () => {
-    const links = document.querySelectorAll(".nav-menu ul li a");
-    links.forEach((link) => {
-      if (link.getAttribute("href") === location.pathname) {
-        link.classList.add("active");
-      }
-    });
+    document
+      .querySelectorAll(".nav-menu ul li a")
+      .forEach((link) => {
+        if (link.getAttribute("href") === location.pathname) {
+          link.classList.add("active");
+        }
+      });
   };
+
+  const prevent = (e) => e.preventDefault();
 
   return (
     <nav className="navbar">
@@ -59,6 +61,28 @@ const Navbar = () => {
             >
               Inicio
             </NavLink>
+          </li>
+
+          {/* placeholder buttons */}
+          <li>
+            <a href="#" onClick={prevent} className="nav-placeholder">
+              Propuestas
+            </a>
+          </li>
+          <li>
+            <a href="#" onClick={prevent} className="nav-placeholder">
+              Votaciones
+            </a>
+          </li>
+          <li>
+            <a href="#" onClick={prevent} className="nav-placeholder">
+              Mural
+            </a>
+          </li>
+          <li>
+            <a href="#" onClick={prevent} className="nav-placeholder">
+              Espacios
+            </a>
           </li>
 
           {userRole === "administrador" && (

@@ -1,14 +1,68 @@
-.table-container .tabulator .tabulator-col {
-    background-color: #003366;
-    color: #fff;
+/* ============================================
+   TABLA DE USUARIOS (Tabulator)
+   ============================================ */
+
+/* Contenedor Tabulator: borde y esquinas redondeadas */
+.table-container .tabulator {
+  border: 1px solid #1C1C1C;   /* borde negro */
+  border-radius: 8px;          /* esquinas redondeadas */
+  overflow: hidden;            /* para que se recorten bien los radios */
 }
-.tabulator .tabulator-footer .tabulator-page {
-    background-color: #fff;
-    color: black;
-    border: 1px solid #003366;
-    padding: 4px 8px;
-    border-radius: 4px;
+
+/* Encabezado: fondo negro y texto beige */
+.table-container .tabulator .tabulator-header .tabulator-col {
+  background-color: #1C1C1C;   /* negro */
+  color: #F8F4EC;              /* beige */
+  font-weight: bold;
 }
-.tabulator .tabulator-footer .tabulator-page.active {
-    color: #E4332C;
+
+/* Filas zebra: pares beige, impares blanco */
+.table-container .tabulator .tabulator-row:nth-child(even) {
+  background-color: #F8F4EC;   /* beige */
+}
+.table-container .tabulator .tabulator-row:nth-child(odd) {
+  background-color: #FFFFFF;   /* blanco */
+}
+
+/* Separadores de celda: líneas negras más finas */
+.table-container .tabulator .tabulator-cell,
+.table-container .tabulator .tabulator-header .tabulator-col {
+  border-right: 1px solid #1C1C1C;
+}
+
+/* Footer de paginación: */
+.table-container .tabulator .tabulator-footer .tabulator-page {
+  background-color: #FFFFFF;   /* blanco */
+  color: #000000;              /* negro */
+  border: 1px solid #1C1C1C;   /* negro */
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin: 0 2px;
+  cursor: pointer;
+}
+.table-container .tabulator .tabulator-footer .tabulator-page.active {
+  background-color: #1C1C1C;   /* negro */
+  color: #F8F4EC;              /* beige */
+  border-color: #1C1C1C;
+}
+
+/* Hover sobre páginas */
+.table-container .tabulator .tabulator-footer .tabulator-page:hover {
+  background-color: #333333;   /* gris oscuro */
+  color: #F8F4EC;
+}
+
+/* Asegura que el header y footer queden pegados al contenido */
+.table-container .tabulator .tabulator-header,
+.table-container .tabulator .tabulator-footer {
+  border-left: none;
+  border-right: none;
+}
+
+/* Ajuste responsivo opcional */
+@media (max-width: 768px) {
+  .table-container .tabulator .tabulator-header .tabulator-col,
+  .table-container .tabulator .tabulator-cell {
+    padding: 6px 8px;
+  }
 }

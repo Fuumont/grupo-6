@@ -1,5 +1,16 @@
 import React from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";  // <-- mismos que en Períodos
+import { FaEdit, FaTrash } from "react-icons/fa";
+import "@styles/MovimientosTable.css";
+
+function formatDate(fecha) {
+  if (!fecha) return "";
+  const iso = typeof fecha === "string"
+    ? fecha
+    : fecha.toISOString();
+  const [datePart] = iso.split("T");
+  const [year, month, day] = datePart.split("-");
+  return `${day}-${month}-${year}`;
+}
 
 export default function MovimientosTable({ data, onEdit, onDelete }) {
   return (
@@ -19,9 +30,12 @@ export default function MovimientosTable({ data, onEdit, onDelete }) {
         {data.map(m => (
           <tr key={m.id}>
             <td>{m.descripcion}</td>
-            <td>{m.fecha}</td>
+            {}
+            <td>{formatDate(m.fecha)}</td>
             <td>{Number(m.monto).toLocaleString("es-CL")}</td>
-            <td>{m.tipo}</td>
+            <td className={`mt-tipo mt-tipo--${m.tipo}`}>
+              {m.tipo === "ingreso" ? "+ ingreso" : "- egreso"}
+            </td>
             <td>{m.usuario.nombreCompleto}</td>
             <td>{m.periodo.anio}</td>
             <td>
@@ -35,15 +49,7 @@ export default function MovimientosTable({ data, onEdit, onDelete }) {
               <button
                 className="btn-icon"
                 title="Eliminar"
-                onClick={() => {
-                  if (
-                    window.confirm(
-                      "¿Estás seguro que deseas eliminar este movimiento?"
-                    )
-                  ) {
-                    onDelete(m.id);
-                  }
-                }}
+                onClick={() => onDelete(m.id)}
               >
                 <FaTrash />
               </button>
@@ -52,5 +58,5 @@ export default function MovimientosTable({ data, onEdit, onDelete }) {
         ))}
       </tbody>
     </table>
-);
+  );
 }

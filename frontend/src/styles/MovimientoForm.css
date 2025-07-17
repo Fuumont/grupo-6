@@ -13,7 +13,7 @@
 
 /* Contenido del modal */
 .modal-content.mf-content {
-  background: #fff;
+  background: #F8F4EC;      /* beige */
   padding: 24px;
   border-radius: 8px;
   width: 360px;
@@ -24,21 +24,27 @@
 .mf-title {
   margin: 0 0 16px;
   font-size: 1.25rem;
+  color: #1C1C1C;           /* negro */
 }
 
 /* Formulario */
 .mf-form .mf-label {
   display: block;
   margin-bottom: 12px;
+  color: #1C1C1C;           /* negro */
 }
 .mf-form .mf-input {
   width: 100%;
   padding: 6px 8px;
   margin-top: 4px;
   box-sizing: border-box;
-  border: 1px solid #ccc;
+  border: 1px solid #1C1C1C;/* negro */
   border-radius: 4px;
+  background-color: #F8F4EC;/* beige */
+  color: #1C1C1C;           /* negro */
 }
+
+/* Botones de acción */
 .mf-actions {
   display: flex;
   justify-content: flex-end;
@@ -46,21 +52,42 @@
   margin-top: 16px;
 }
 
-/* Botones dentro del modal */
 .mf-btn {
   padding: 6px 12px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
+
+/* Botones secundarios */
 .mf-btn:not(.btn-primary) {
-  background: #f0f0f0;
-  color: #333;
+  background: #F8F4EC;      /* beige */
+  color: #1C1C1C;           /* negro */
+  border: 1px solid #1C1C1C;/* negro */
 }
+
+/* Botón primario */
 .btn-primary.mf-btn {
-  background: #00509e;
-  color: #fff;
+  background: #1C1C1C;      /* negro */
+  color: #F8F4EC;           /* beige */
 }
 .btn-primary.mf-btn:hover {
-  background: #003366;
+  background: #3A3A3A;      /* gris oscuro */
+}
+
+/* Tipos: verde y rojo sin tocar */
+.mt-tipo { font-weight: bold; }
+.mt-tipo--ingreso { color: green; }
+.mt-tipo--egreso  { color: red;   }
+
+/* Icon buttons */
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #1C1C1C;           /* negro */
+}
+.btn-icon:hover {
+  opacity: 0.8;
 }

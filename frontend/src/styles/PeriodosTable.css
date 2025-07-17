@@ -1,7 +1,13 @@
+/* src/styles/PeriodosTable.css */
+
 /* Empuja tu tabla hacia abajo para no quedar tapada por el navbar */
 .pt-container {
-  margin-top: 80px;    /* Ajusta 80px al alto de tu navbar */
+  margin-top: 9vh;          /* Igual que la altura de tu navbar (9vh) */
   padding: 0 16px;
+  background-color: #F8F4EC;  /* Beige floral white */
+  /* Si quieres que siempre ocupe todo el alto sobrante, podrías añadir:
+     min-height: calc(100vh - 9vh);
+  */
 }
 
 /* Tabla básica */
@@ -13,28 +19,30 @@
 
 .pt-table th,
 .pt-table td {
-  border: 1px solid #ccc;
+  border: 1px solid #1C1C1C;  /* Negro Eerie black */
   padding: 8px;
 }
 
 .pt-table th {
-  background-color: #003366;
-  color: #fff;
+  background-color: #1C1C1C;  /* Negro */
+  color: #F8F4EC;             /* Beige */
   text-align: left;
 }
 
 /* Filas alternas */
 .pt-table tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: #F8F4EC;  /* Beige */
 }
 
 /* Mensajes de estado */
 .pt-loading,
 .pt-error {
-  margin-top: 80px;
+  margin-top: 9vh;
   text-align: center;
   font-style: italic;
+  color: #1C1C1C;             /* Negro */
 }
+
 /* Alínea las acciones y separa los botones */
 .pt-actions {
   display: flex;
@@ -45,20 +53,14 @@
 .pt-actions button {
   padding: 4px 6px;
   border: none;
-  background: #00509e;
-  color: #fff;
-  border-radius: 4px;
+  background: #1C1C1C;        /* Negro */
+  color: #F8F4EC;             /* Beige */
+  border-radius: 6px;         /* Bordes un poco más curvos */
   cursor: pointer;
 }
 
 .pt-actions button:hover {
-  background: #003366;
-}
-
-/* desplazamiento por el navbar */
-.pt-container {
-  margin-top: 80px;
-  padding: 0 16px;
+  background: #333333;        /* Gris oscuro */
 }
 
 /* filtros y botón */
@@ -72,22 +74,24 @@
 .filter-input,
 .filter-select {
   padding: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #1C1C1C;  /* Negro */
   border-radius: 4px;
+  background: #F8F4EC;
+  color: #1C1C1C;
 }
 
 /* botón primario estilo Users */
 .btn-primary {
-  background: #00509e;
-  color: #fff;
+  background: #1C1C1C;        /* Negro */
+  color: #F8F4EC;             /* Beige */
   border: none;
   padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
 }
 
 .btn-primary:hover {
-  background: #003366;
+  background: #333333;        /* Gris oscuro */
 }
 
 /* acciones en tabla */
@@ -108,19 +112,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1000;
 }
 
 .modal-content {
-  background: #fff;
+  background: #F8F4EC;       /* Beige */
   padding: 24px;
-  border-radius: 8px;
+  border-radius: 12px;       /* Bordes curvos */
   width: 320px;
+  max-width: 90%;
 }
 
 /* formulario */
 .pt-form label {
   display: block;
   margin-bottom: 12px;
+  color: #1C1C1C;            /* Negro */
 }
 
 .pt-form input[type="text"],
@@ -130,14 +137,19 @@
   padding: 6px;
   margin-top: 4px;
   box-sizing: border-box;
+  border: 1px solid #1C1C1C; /* Negro */
+  border-radius: 4px;
+  color: #1C1C1C;
 }
 
+/* checkbox */
 .pt-checkbox {
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
+/* acciones del formulario */
 .pt-form-actions {
   display: flex;
   justify-content: flex-end;
@@ -145,23 +157,13 @@
   margin-top: 16px;
 }
 
-/* estados */
-.pt-loading,
-.pt-error {
-  margin-top: 80px;
-  text-align: center;
-  font-style: italic;
-}
-
-/* Iconos azules y tamaño un poco mayor */
+/* Iconos (por ejemplo react‑icons) */
 .pt-icon {
-  color: #00509e;
+  color: #1C1C1C;            /* Negro */
   font-size: 1.25rem;
 }
 
-/* Ajuste botones acción para que tengan algo de espacio */
+/* Ajuste botones acción para que tengan espacio */
 .pt-td-actions .pt-btn {
   margin-left: 4px;
 }
-
-

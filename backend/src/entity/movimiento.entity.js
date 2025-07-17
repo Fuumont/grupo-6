@@ -26,9 +26,16 @@ const MovimientoSchema = new EntitySchema({
       length: 100,
       nullable: false,
     },
+    // —————————————
+    // Aquí nos aseguramos de usar sólo DATE:
     fecha: {
       type: "date",
       nullable: false,
+    },
+    // —————————————
+    activo: {
+      type: "boolean",
+      default: true,
     },
   },
   relations: {
@@ -39,12 +46,12 @@ const MovimientoSchema = new EntitySchema({
       nullable: false,
       onDelete: "CASCADE",
     },
-  propuesta: {
+    propuesta: {
       type: "many-to-one",
       target: "Propuesta",
       joinColumn: true,
       nullable: true,
-},
+    },
     periodo: {
       type: "many-to-one",
       target: "PeriodoAcademico",

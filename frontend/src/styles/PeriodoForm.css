@@ -1,6 +1,6 @@
 /* src/styles/PeriodoForm.css */
 
-/* Modal overlay identical to Periodos */
+/* Modal overlay idéntico a Periodos */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -11,14 +11,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1000;
 }
 
 /* Modal content */
 .modal-content.pf-content {
-  background: #fff;
+  background: #F8F4EC;        /* beige Floral white */
   padding: 24px;
-  border-radius: 8px;
+  border-radius: 12px;        /* bordes más curvos */
   width: 360px;
+  max-width: 90%;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
@@ -26,21 +28,26 @@
 .pf-title {
   margin: 0 0 16px;
   font-size: 1.25rem;
+  color: #1C1C1C;             /* negro Eerie black */
+  font-weight: bold;
 }
 
 /* Form labels and inputs */
 .pf-form .pf-label {
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   font-weight: 500;
+  color: #1C1C1C;             /* negro */
 }
 .pf-form .pf-input {
   width: 100%;
   padding: 6px 8px;
   margin-top: 4px;
   box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 2px solid #1C1C1C; /* negro */
+  border-radius: 6px;
+  background-color: #FFF;     /* blanco puro para contraste */
+  color: #1C1C1C;             /* negro */
 }
 
 /* Checkbox label */
@@ -49,6 +56,7 @@
   align-items: center;
   gap: 6px;
   margin-top: 12px;
+  color: #1C1C1C;
 }
 
 /* Actions row */
@@ -63,27 +71,28 @@
 .pf-btn {
   padding: 6px 12px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;         /* ligeramente más curvo */
   cursor: pointer;
+  font-weight: 500;
 }
 .pf-btn:not(.btn-primary) {
-  background: #f0f0f0;
-  color: #333;
+  background: #D9CAB3;        /* Dun para secundarios */
+  color: #1C1C1C;
 }
 .btn-primary.pf-btn {
-  background: #00509e;
-  color: #fff;
+  background: #1C1C1C;        /* Eerie black */
+  color: #F8F4EC;             /* Floral white */
 }
 .btn-primary.pf-btn:hover {
-  background: #003366;
+  background: #333333;        /* gris oscuro */
 }
-/* Checkbox más grande y label a la izquierda */
+
+/* Checkbox más grande y label alineado */
 .pt-checkbox {
   display: flex;
   align-items: center;
   margin-top: 12px;
 }
-
 .pt-checkbox input[type="checkbox"] {
   transform: scale(1.5);
   margin-right: 8px;

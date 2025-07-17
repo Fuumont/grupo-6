@@ -3,19 +3,17 @@ import { updateMovimiento } from "@services/movimientos.service";
 
 export default function useUpdateMovimiento(onSuccess) {
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState(null);
+  const [error,   setError]   = useState(null);
 
-  const doUpdate = async (id, payload) => {
+  const doUpdate = async (payload) => {
+    const { id, ...body } = payload;
     setLoading(true);
     setError(null);
     try {
-      const res = await updateMovimiento(id, payload);
-      if (res.status !== "Success") {
-        throw new Error(res.message || "Error al actualizar movimiento");
-      }
+      await updateMovimiento(id, body);
       onSuccess?.();
-      return res;
     } catch (err) {
+      console.error("❌ updateMovimiento error:", err.response?.data || err);
       setError(err);
       throw err;
     } finally {

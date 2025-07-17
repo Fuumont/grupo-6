@@ -5,6 +5,7 @@
     align-items: center;
     height: 100vh;
     width: 100%;
+    background-color: #F8F4EC; /* fondo beige */
 }
 
 .table-container {
@@ -21,20 +22,24 @@
 }
 
 .title-table {
-    color: #003366;
+    color: #1C1C1C;  /* texto negro */
     margin-left: 70px;
 }
 
 .filter-actions {
     display: flex;
     gap: 10px;
-    button {
-        background: rgba(255, 255, 255, 0.87);
-        border: #fff;
-        cursor: pointer;
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-        
-    }
+}
+.filter-actions button {
+    background: #F8F4EC;         /* beige */
+    color: #1C1C1C;              /* negro */
+    border: 1px solid #1C1C1C;   /* negro */
+    cursor: pointer;
+    box-shadow: rgba(28, 28, 28, 0.2) 0px 2px 8px 0px;
+}
+.filter-actions button:hover {
+    background: #1C1C1C;         /* negro */
+    color: #F8F4EC;              /* beige */
 }
 
 .delete-user-button {
@@ -73,6 +78,8 @@
 
     .popup .close {
         margin-right: 0;
+        background-color: #1C1C1C; /* negro */
+        color: #F8F4EC;            /* beige */
     }
 
     .popup .options-class {

@@ -3,7 +3,7 @@ import { createMovimiento } from "@services/movimientos.service";
 
 export default function useCreateMovimiento(onSuccess) {
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState(null);
+  const [error,   setError]   = useState(null);
 
   const doCreate = async (payload) => {
     setLoading(true);
@@ -13,6 +13,7 @@ export default function useCreateMovimiento(onSuccess) {
       if (res.status !== "Success") {
         throw new Error(res.message || "Error al crear movimiento");
       }
+
       onSuccess?.();
       return res;
     } catch (err) {

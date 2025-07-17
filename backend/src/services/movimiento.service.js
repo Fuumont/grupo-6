@@ -1,4 +1,5 @@
 "use strict";
+
 import { AppDataSource } from "../config/configDb.js";
 import MovimientoSchema from "../entity/movimiento.entity.js";
 import PropuestaSchema from "../entity/propuesta.entity.js";
@@ -6,51 +7,77 @@ import PeriodoAcademicoSchema from "../entity/periodo.academico.entity.js";
 import User from "../entity/user.entity.js";
 
 const movimientoRepo = AppDataSource.getRepository(MovimientoSchema);
-const propuestaRepo = AppDataSource.getRepository(PropuestaSchema);
-const periodoRepo = AppDataSource.getRepository(PeriodoAcademicoSchema);
-const usuarioRepo = AppDataSource.getRepository(User);
+const propuestaRepo  = AppDataSource.getRepository(PropuestaSchema);
+const periodoRepo    = AppDataSource.getRepository(PeriodoAcademicoSchema);
+const usuarioRepo    = AppDataSource.getRepository(User);
 
+// Helper para obtener YYYY-MM-DD en horario local
+function getLocalDateString() {
+  const d = new Date();
+  const day   = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year  = d.getFullYear();
+  return `${year}-${month}-${day}`;
+}
 
 // Crear un nuevo movimiento
 export async function crearMovimientoService(data, userId) {
   try {
-    const fecha = data.fecha || new Date();
+    // 1) Determinar la cadena YYYY-MM-DD
+    const fechaStr = typeof data.fecha === "string" && data.fecha.length === 10
+      ? data.fecha
+      : getLocalDateString();
+    // 2) Convertir para validar
+    const fechaObj = new Date(fechaStr);
 
     const periodo = await periodoRepo.findOneBy({ id: data.id_periodo });
     if (!periodo || !periodo.activo)
       return [null, "Periodo académico inválido o inactivo."];
 
-    if (fecha < new Date(periodo.fecha_inicio) || fecha > new Date(periodo.fecha_fin))
+    if (fechaObj < new Date(periodo.fecha_inicio) ||
+        fechaObj > new Date(periodo.fecha_fin)) {
       return [null, "La fecha no está dentro del periodo académico activo."];
+    }
 
     const usuario = await usuarioRepo.findOneBy({ id: userId });
     if (!usuario) return [null, "Usuario no encontrado."];
     if (usuario.rol !== "tesorero")
       return [null, "Solo el tesorero puede registrar movimientos."];
 
-    // Validación de egresos
+    // Validación de egresos obligando propuesta aprobada por DDE
     if (data.tipo === "egreso") {
-      if (data.propuestaId) {
-        const propuesta = await propuestaRepo.findOneBy({ id: data.propuestaId });
-        if (!propuesta || propuesta.estado_dde !== true)
-          return [null, "La propuesta no ha sido aprobada por la DDE."];
+      // Detectamos el campo correcto (id_propuesta o propuestaId)
+      const propuestaId = data.id_propuesta ?? data.propuestaId;
+      if (!propuestaId) {
+        return [null, "Para crear un egreso debes indicar una propuesta aprobada por la DDE."];
+      }
+      const propuesta = await propuestaRepo.findOneBy({ id: propuestaId });
+      if (!propuesta || propuesta.estado_dde !== true) {
+        return [null, "La propuesta no ha sido aprobada por la DDE."];
       }
 
-      const movimientos = await movimientoRepo.findBy({ periodo: { id: data.id_periodo } });
-      const saldoActual = movimientos.reduce((acc, m) =>
-        m.tipo === "ingreso" ? acc + parseFloat(m.monto) : acc - parseFloat(m.monto), 0);
+      const movs = await movimientoRepo.findBy({ periodo: { id: data.id_periodo } });
+      const saldoActual = movs.reduce(
+        (acc, m) => m.tipo === "ingreso"
+          ? acc + parseFloat(m.monto)
+          : acc - parseFloat(m.monto),
+        0
+      );
       if (saldoActual < data.monto)
         return [null, "Saldo insuficiente para realizar este egreso."];
     }
 
+    // 3) Creamos el movimiento usando la cadena
     const nuevoMovimiento = movimientoRepo.create({
-      monto: data.monto,
-      tipo: data.tipo,
+      monto:       data.monto,
+      tipo:        data.tipo,
       descripcion: data.descripcion,
-      fecha: fecha,
-      usuario: { id: userId },
-      periodo: { id: data.id_periodo },
-      propuesta: data.propuestaId ? { id: data.propuestaId } : null
+      fecha:       fechaStr,
+      usuario:     { id: userId },
+      periodo:     { id: data.id_periodo },
+      propuesta:   (data.id_propuesta || data.propuestaId)
+                    ? { id: data.id_propuesta ?? data.propuestaId }
+                    : null
     });
 
     const guardado = await movimientoRepo.save(nuevoMovimiento);
@@ -61,37 +88,29 @@ export async function crearMovimientoService(data, userId) {
   }
 }
 
-
-// Obtener todos los movimientos
+// Obtener todos los movimientos activos
 export async function getMovimientosService() {
   try {
     const movimientos = await movimientoRepo.find({
+      where: { activo: true },
       relations: ["usuario", "propuesta", "periodo"],
       order: { id: "ASC" }
     });
+    if (!movimientos.length) return [[], "No se encontraron movimientos"];
 
-    if (!movimientos || movimientos.length === 0)
-      return [[], "No se encontraron movimientos"];
-
-    // Calcular saldo dinámico
     const saldo = movimientos.reduce((acc, m) =>
-      m.tipo === "ingreso" ? acc + parseFloat(m.monto) : acc - parseFloat(m.monto), 0);
+      m.tipo === "ingreso" ? acc + parseFloat(m.monto) : acc - parseFloat(m.monto),
+    0);
 
     const dataSanitizada = movimientos.map(m => ({
-      id: m.id,
-      monto: m.monto,
-      tipo: m.tipo,
+      id:          m.id,
+      monto:       m.monto,
+      tipo:        m.tipo,
       descripcion: m.descripcion,
-      fecha: m.fecha,
-      usuario: {
-        nombreCompleto: m.usuario?.nombreCompleto || "Usuario eliminado"
-      },
-      propuesta: m.propuesta ? {
-        nombre: m.propuesta.nombre
-      } : null,
-      periodo: {
-        anio: m.periodo.anio
-      }
+      fecha:       m.fecha,
+      usuario:     { nombreCompleto: m.usuario?.nombreCompleto || "Usuario eliminado" },
+      propuesta:   m.propuesta ? { nombre: m.propuesta.nombre } : null,
+      periodo:     { anio: m.periodo.anio }
     }));
 
     return [{ movimientos: dataSanitizada, saldo }, null];
@@ -101,7 +120,6 @@ export async function getMovimientosService() {
   }
 }
 
-
 // Obtener un solo movimiento
 export async function getMovimientoService(id) {
   try {
@@ -109,27 +127,18 @@ export async function getMovimientoService(id) {
       where: { id },
       relations: ["usuario", "propuesta", "periodo"]
     });
-
-    if (!movimiento)
-      return [null, "Movimiento no encontrado"];
+    if (!movimiento) return [null, "Movimiento no encontrado"];
 
     const data = {
-      id: movimiento.id,
-      monto: movimiento.monto,
-      tipo: movimiento.tipo,
+      id:          movimiento.id,
+      monto:       movimiento.monto,
+      tipo:        movimiento.tipo,
       descripcion: movimiento.descripcion,
-      fecha: movimiento.fecha,
-      usuario: {
-        nombreCompleto: movimiento.usuario?.nombreCompleto || "Usuario eliminado"
-      },
-      propuesta: movimiento.propuesta ? {
-        nombre: movimiento.propuesta.nombre
-      } : null,
-      periodo: {
-        anio: movimiento.periodo.anio
-      }
+      fecha:       movimiento.fecha,
+      usuario:     { nombreCompleto: movimiento.usuario?.nombreCompleto || "Usuario eliminado" },
+      propuesta:   movimiento.propuesta ? { nombre: movimiento.propuesta.nombre } : null,
+      periodo:     { anio: movimiento.periodo.anio }
     };
-
     return [data, null];
   } catch (error) {
     console.error("Error al obtener movimiento:", error);
@@ -137,70 +146,61 @@ export async function getMovimientoService(id) {
   }
 }
 
-
-// Eliminar un movimiento
+// Soft‑delete
 export async function deleteMovimientoService(id) {
   try {
     const movimiento = await movimientoRepo.findOneBy({ id });
-
-    if (!movimiento)
-      return [null, "Movimiento no encontrado"];
-
-    const eliminado = await movimientoRepo.remove(movimiento);
-
-    return [eliminado, null];
+    if (!movimiento) return [null, "Movimiento no encontrado"];
+    movimiento.activo = false;
+    const inactivado = await movimientoRepo.save(movimiento);
+    return [inactivado, null];
   } catch (error) {
-    console.error("Error al eliminar movimiento:", error);
+    console.error("Error al inactivar movimiento:", error);
     return [null, "Error interno del servidor"];
   }
 }
 
-// Actualizar un movimiento por ID
+// Actualizar un movimiento
 export async function updateMovimientoService(id, data) {
   try {
-    const movimiento = await movimientoRepo.findOneBy({ id });
-    if (!movimiento) return [null, "Movimiento no encontrado"];
+    const mov = await movimientoRepo.findOneBy({ id });
+    if (!mov) return [null, "Movimiento no encontrado"];
 
     const periodo = await periodoRepo.findOneBy({ id: data.id_periodo });
     if (!periodo) return [null, "Periodo académico no existe."];
 
-    // Validar propuesta si viene
-    let propuesta = null;
-    if (data.id_propuesta) {
-      propuesta = await propuestaRepo.findOneBy({ id: data.id_propuesta });
-      if (!propuesta || !propuesta.estado_dde)
-        return [null, "La propuesta no existe o no ha sido aprobada por la DDE"];
+    // parseamos "YYYY-MM-DD"
+    const [year, month, day] = data.fecha.split("-").map(Number);
+    const fechaObj = new Date(year, month - 1, day);
+    fechaObj.setHours(12, 0, 0, 0);
+
+    if (fechaObj < new Date(periodo.fecha_inicio) ||
+        fechaObj > new Date(periodo.fecha_fin)) {
+      return [null, "La fecha está fuera del rango del periodo académico."];
     }
 
-    const fecha = new Date(data.fecha);
-    if (fecha < new Date(periodo.fecha_inicio) || fecha > new Date(periodo.fecha_fin))
-      return [null, "La fecha está fuera del rango del periodo académico."];
-
-    // Saldo sin contar el movimiento actual
-    const todosMovimientos = await movimientoRepo.findBy({ periodo: { id: data.id_periodo } });
-    const saldoAntes = todosMovimientos
-      .filter((m) => m.id !== id)
-      .reduce((acc, m) =>
-        m.tipo === "ingreso" ? acc + parseFloat(m.monto) : acc - parseFloat(m.monto), 0);
-
-    const saldo_resultante = data.tipo === "ingreso"
+    const todosMovs = await movimientoRepo.findBy({ periodo: { id: data.id_periodo } });
+    const saldoAntes = todosMovs
+      .filter(m2 => m2.id !== id)
+      .reduce((acc, m2) =>
+        m2.tipo === "ingreso" ? acc + parseFloat(m2.monto) : acc - parseFloat(m2.monto),
+      0);
+    const saldoResult = data.tipo === "ingreso"
       ? saldoAntes + data.monto
       : saldoAntes - data.monto;
-
-    if (data.tipo === "egreso" && saldo_resultante < 0)
+    if (data.tipo === "egreso" && saldoResult < 0)
       return [null, "Saldo insuficiente para este egreso después de la modificación."];
 
     const actualizado = {
-      ...movimiento,
-      monto: data.monto,
-      tipo: data.tipo,
+      ...mov,
+      monto:       data.monto,
+      tipo:        data.tipo,
       descripcion: data.descripcion,
-      fecha: data.fecha,
-      periodo: { id: data.id_periodo },
-      propuesta: propuesta ? { id: propuesta.id } : null,
-      updatedAt: new Date(),
+      fecha:       fechaObj,
+      periodo:     { id: data.id_periodo },
+      propuesta:   data.propuestaId ? { id: data.propuestaId } : null,
+      updatedAt:   new Date()
     };
-
     await movimientoRepo.save(actualizado);
     return [actualizado, null];
   } catch (error) {
@@ -208,25 +208,45 @@ export async function updateMovimientoService(id, data) {
     return [null, "Error interno del servidor"];
   }
 }
-  // obtener el saldo total de los movimientos
+
+// Calcular saldo
 export async function calcularSaldoService() {
   try {
-    const movimientos = await movimientoRepo.find({
-      select: ["tipo", "monto"]
-    });
-
-    if (!Array.isArray(movimientos) || movimientos.length === 0) {
-      return [0, "No hay movimientos registrados"];
-    }
-
-    const saldo = movimientos.reduce((acc, movimiento) => {
-      const monto = parseFloat(movimiento.monto);
-      return movimiento.tipo === "ingreso" ? acc + monto : acc - monto;
-    }, 0);
-
+    const movimientos = await movimientoRepo.find({ select: ["tipo", "monto"] });
+    if (!movimientos.length) return [0, "No hay movimientos registrados"];
+    const saldo = movimientos.reduce((acc, m) =>
+      m.tipo === "ingreso" ? acc + parseFloat(m.monto) : acc - parseFloat(m.monto),
+    0);
     return [saldo, null];
   } catch (error) {
-    console.error("Error al calcular el saldo:", error);
+    console.error("Error al calcular saldo:", error);
     return [null, "Error interno al calcular saldo"];
+  }
+}
+
+// Movimientos inactivos / restaurar
+export async function getMovimientosInactivosService() {
+  try {
+    const movs = await movimientoRepo.find({
+      where: { activo: false },
+      relations: ["usuario", "propuesta", "periodo"],
+      order: { id: "ASC" }
+    });
+    return [movs, null];
+  } catch (error) {
+    console.error("Error al obtener movimientos inactivos:", error);
+    return [null, "Error interno del servidor"];
+  }
+}
+export async function restoreMovimientoService(id) {
+  try {
+    const mov = await movimientoRepo.findOneBy({ id });
+    if (!mov) return [null, "Movimiento no encontrado"];
+    mov.activo = true;
+    const rest = await movimientoRepo.save(mov);
+    return [rest, null];
+  } catch (error) {
+    console.error("Error al restaurar movimiento:", error);
+    return [null, "Error interno del servidor"];
   }
 }

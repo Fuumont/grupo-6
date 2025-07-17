@@ -13,8 +13,6 @@ export default function useGetPeriodos() {
 
     try {
       const res = await service.getPeriodos();
-      // mapeamos para dejar fecha_inicio/fecha_fin crudas (ISO)
-      // y creamos display_inicio/display_fin para la tabla
       const mapped = res.message.map(p => ({
         id:       p.id,
         anio:     p.anio,

@@ -1,5 +1,5 @@
 
-import api from "./root.service"; // tu instancia de Axios con interceptor
+import api from "./root.service";
 
 const BASE = "/periodos";
 
@@ -18,13 +18,11 @@ export async function getPeriodo(id) {
 export async function createPeriodo(payload) {
   // POST /api/periodos
   const response = await api.post(BASE, payload);
-  return response.data;           // { status, message: { … } }
+  return response.data;
 }
 
 export async function updatePeriodo(periodo) {
-  // Asegurémonos de extraer un id primitivo
   const rawId = periodo.id;
-  // Si recibimos { id: 5, ... } o directamente 5, hacemos:
   const id =
     typeof rawId === "object" && rawId != null && rawId.id != null
       ? rawId.id
@@ -51,5 +49,5 @@ export async function exportMovimientos(periodoId) {
   const response = await api.get(`${BASE}/${periodoId}/movimientos/pdf`, {
     responseType: "blob",
   });
-  return response.data; // un Blob
+  return response.data;
 }

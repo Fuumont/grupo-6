@@ -1,4 +1,4 @@
-import api from "./root.service"; // tu instancia de Axios
+import api from "./root.service";
 
 const BASE = "/periodos";
 

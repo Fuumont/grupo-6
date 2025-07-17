@@ -6,7 +6,7 @@ export default function useUpdatePeriodo(onSuccess) {
   const [error,   setError]   = useState(null);
 
   const doUpdate = async (payload) => {
-    console.log("▶️ Updating periodo con payload:", payload);
+    console.log(" Updating periodo con payload:", payload);
     setLoading(true);
     setError(null);
     try {
@@ -14,7 +14,7 @@ export default function useUpdatePeriodo(onSuccess) {
       onSuccess?.();
       return res;
     } catch (err) {
-      console.error("❌ updatePeriodo error:", err.response?.data || err);
+      console.error(" updatePeriodo error:", err.response?.data || err);
       setError(err);
       throw err;
     } finally {

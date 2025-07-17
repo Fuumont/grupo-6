@@ -1,4 +1,4 @@
-
+import React from "react";
 import { FaEdit, FaTrash, FaFilePdf } from "react-icons/fa";
 import "@styles/PeriodosTable.css";
 
@@ -37,16 +37,12 @@ export default function PeriodosTable({
               </button>
               <button
                 className="pt-btn pt-btn-delete"
-                onClick={() => {
-                  if (window.confirm("¿Seguro que quieres eliminar este período?")) {
-                    onDelete(p.id);
-                  }
-                }}
+                onClick={() => onDelete(p.id)}
                 title="Eliminar"
               >
                 <FaTrash className="pt-icon" />
               </button>
-              {/* Solo este botón exporta PDF */}
+
               <button
                 className="pt-btn pt-btn-export"
                 onClick={() => onExportMovimientos(p.id)}
@@ -60,5 +56,5 @@ export default function PeriodosTable({
         ))}
       </tbody>
     </table>
-);
+  );
 }

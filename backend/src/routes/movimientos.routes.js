@@ -4,12 +4,14 @@ import { authenticateJwt } from "../middlewares/authentication.middleware.js";
 import { isTesorero } from "../middlewares/authorization.middleware.js";
 import { generarReportePDF } from "../controllers/pdf.controller.js";
 import {
-  createMovimiento,
-  deleteMovimiento,
-  getMovimiento,
-  getMovimientos,
-  getSaldo,
-  updateMovimiento,
+createMovimiento,
+deleteMovimiento,
+getMovimiento,
+getMovimientos,
+getMovimientosInactivos,
+getSaldo,
+restoreMovimiento,
+updateMovimiento
 } from "../controllers/movimiento.controller.js";
 
 
@@ -25,7 +27,9 @@ router
   .put("/", updateMovimiento) // Actualizar un movimiento por ID
   .delete("/", deleteMovimiento) // Eliminar un movimiento por ID
   .get("/saldo", getSaldo)// Obtener el saldo actual
-  .get("/reporte/:id_periodo", generarReportePDF);
+  .get("/reporte/:id_periodo", generarReportePDF)
+  .get("/inactivos", getMovimientosInactivos)
+  .post("/:id/restaurar", restoreMovimiento);
 
 
 export default router;

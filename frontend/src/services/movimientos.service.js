@@ -2,7 +2,7 @@ import api from "./root.service";
 
 const BASE = "/movimientos";
 
-/** GET /api/movimientos → { status, message, data: { movimientos, saldo } } */
+/** GET /api/movimientos */
 export async function getMovimientos() {
   try {
     const resp = await api.get(BASE);
@@ -36,6 +36,26 @@ export async function updateMovimiento(id, payload) {
 export async function deleteMovimiento(id) {
   try {
     const resp = await api.delete(`${BASE}?id=${id}`);
+    return resp.data;
+  } catch (err) {
+    return err.response.data;
+  }
+}
+
+/** GET /api/movimientos/inactivos */
+export async function getMovimientosInactivos() {
+  try {
+    const resp = await api.get(`${BASE}/inactivos`);
+    return resp.data;
+  } catch (err) {
+    return err.response.data;
+  }
+}
+
+/** POST /api/movimientos/:id/restaurar */
+export async function restoreMovimiento(id) {
+  try {
+    const resp = await api.post(`${BASE}/${id}/restaurar`);
     return resp.data;
   } catch (err) {
     return err.response.data;

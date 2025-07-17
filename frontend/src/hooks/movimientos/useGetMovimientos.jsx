@@ -7,11 +7,11 @@ export default function useGetMovimientos() {
   const [loading,      setLoading]     = useState(true);
   const [error,        setError]       = useState(null);
 
-  const fetch = async () => {
+
+  const fetchMovimientos = async () => {
     setLoading(true);
     try {
       const { data } = await getMovimientos();
-      // data: { movimientos: [...], saldo: number }
       setMovimientos(data.movimientos);
       setSaldo(data.saldo);
     } catch (err) {
@@ -23,8 +23,15 @@ export default function useGetMovimientos() {
   };
 
   useEffect(() => {
-    fetch();
+    fetchMovimientos();
   }, []);
 
-  return { movimientos, saldo, loading, error, refetch: fetch };
+  return {
+    movimientos,
+    saldo,
+    loading,
+    error,
+    fetchMovimientos,
+    refetch: fetchMovimientos,
+  };
 }

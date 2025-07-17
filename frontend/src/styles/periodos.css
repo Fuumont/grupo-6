@@ -1,0 +1,79 @@
+/* src/styles/periodos.css */
+
+/* Contenedor principal */
+.pt-container {
+  position: relative;
+  background-color: #F8F4EC;  /* Beige Floral white */
+  min-height: calc(100vh - 9vh); /* Restar la altura de la navbar */
+  padding: 9vh 1rem 2rem;     /* 9vh arriba para liberar espacio bajo la navbar */
+  box-sizing: border-box;
+}
+
+/* Título en cajita al estilo Home */
+.pt-title {
+  display: inline-block;
+  background-color: #D9CAB3;  /* Dun */
+  color: #1C1C1C;             /* Eerie black */
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-bottom: 1.5rem;
+}
+
+/* Barra de filtros (heredada de Home, opcional) */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Inputs y selects */
+.filter-input,
+.filter-select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #1C1C1C;
+  border-radius: 6px;
+  background: #fff;
+  color: #1C1C1C;
+  font-size: 1rem;
+}
+
+/* Botón primario */
+.btn-primary {
+  background: #1C1C1C;
+  color: #F8F4EC;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-primary:hover {
+  background: #333333;
+}
+
+/* Si quieres que la tabla mantenga cierto estilo, añade aquí */
+.pt-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.pt-table th,
+.pt-table td {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+.pt-table th {
+  background: #1C1C1C;
+  color: #F8F4EC;
+}
+.pt-table tr:nth-child(even) {
+  background: #F8F4EC;
+}
