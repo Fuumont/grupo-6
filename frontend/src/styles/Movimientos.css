@@ -23,11 +23,35 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* Saldo */
+/* Saldo  */
 .mt-saldo {
+  display: inline-block;                 /* Para envolver solo al texto */
+  background-color: #D9CAB3;             /* Dun */
+  color: #1C1C1C;                        /* Eerie black */
   font-size: 1.1rem;
-  color: #1C1C1C;
+  font-weight: bold;
+  padding: 1rem 1.5rem;                  /* Espacio interior */
+  margin-left: 0.5rem;                   /* Empujar unos píxeles a la derecha */
+  border-radius: 8px;                    /* Esquinas redondeadas */
   margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Sombra suave */
+  transition: transform 0.2s ease,
+              box-shadow 0.2s ease;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.mt-saldo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  50% {
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  }
 }
 
 /* Barra de filtros */

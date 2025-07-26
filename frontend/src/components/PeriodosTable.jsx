@@ -17,6 +17,7 @@ export default function PeriodosTable({
           <th>Inicio</th>
           <th>Fin</th>
           <th>Activo</th>
+         <th>Responsable</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -27,6 +28,7 @@ export default function PeriodosTable({
             <td>{p.display_inicio}</td>
             <td>{p.display_fin}</td>
             <td>{p.activo ? "Sí" : "No"}</td>
+           <td>{p.responsable}</td>
             <td className="pt-td-actions">
               <button
                 className="pt-btn pt-btn-edit"

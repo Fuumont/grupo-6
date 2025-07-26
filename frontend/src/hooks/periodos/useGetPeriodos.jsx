@@ -14,13 +14,14 @@ export default function useGetPeriodos() {
     try {
       const res = await service.getPeriodos();
       const mapped = res.message.map(p => ({
-        id:       p.id,
-        anio:     p.anio,
-        fecha_inicio: p.fecha_inicio.split("T")[0],
-        fecha_fin:    p.fecha_fin.split("T")[0],
-        display_inicio: formatPeriodoDateDisplay(p.fecha_inicio),
-        display_fin:    formatPeriodoDateDisplay(p.fecha_fin),
-        activo:   p.activo,
+        id:              p.id,
+        anio:            p.anio,
+        fecha_inicio:    p.fecha_inicio.split("T")[0],
+        fecha_fin:       p.fecha_fin.split("T")[0],
+        display_inicio:  formatPeriodoDateDisplay(p.fecha_inicio),
+        display_fin:     formatPeriodoDateDisplay(p.fecha_fin),
+        activo:          p.activo,
+        responsable:     p.usuario?.nombreCompleto || "—"    // ← nuevo campo
       }));
 
       setPeriodos(mapped);

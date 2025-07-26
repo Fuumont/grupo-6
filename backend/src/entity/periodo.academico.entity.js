@@ -36,6 +36,16 @@ const PeriodoAcademicoSchema = new EntitySchema({
       unique: true,
     },
   ],
+  relations: {
+    usuario: {
+      type: "many-to-one",
+      target: "User",
+      joinColumn: { name: "id_usuario" },
+      eager: true,
+      nullable: true,
+      onDelete: "CASCADE",
+    },
+  },
 });
 
 export default PeriodoAcademicoSchema;

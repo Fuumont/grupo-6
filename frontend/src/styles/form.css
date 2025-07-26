@@ -1,8 +1,15 @@
+/* src/styles/Login.css */
+
+/* Responsive para móviles */
 @media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+
   .form {
+    width: 90%;
     padding-left: 2px;
     padding-right: 2px;
-    width: 90%;
   }
 
   .form h1 {
@@ -25,164 +32,143 @@
     font-size: 12px;
   }
 
-  .container {
-    padding: 0 10px;
-  }
-
   .toggle-password-icon {
     width: 20px;
     height: 20px;
+    top: 50%;
   }
 }
 
-.form {
-  /* Fondo beige */
-  background-color: #F8F4EC;
-  padding: 7vh;
-  display: flex;
-  flex-direction: column;
-  border-radius: 24px;
-  align-items: center;
-
-  h1 {
-    /* Títulos en negro */
-    color: #1C1C1C;
-    font-size: 30px;
-    font-weight: bold;
-    margin: 0 0 4vh;
-  }
-  div {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  label {
-    /* Labels en negro */
-    color: #1C1C1C;
-    font-weight: bold;
-    margin-bottom: 0.7vh;
-  }
-  input {
-    border: 3px solid #1C1C1C; /* borde negro */
-    border-radius: 12px;
-    padding: 8px 5px;
-    background-color: #F8F4EC; /* beige */
-    margin-bottom: 0.8vh;
-    font-size: 16px;
-    color: #1C1C1C; /* texto negro */
-    box-sizing: border-box;
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 25px 25px;
-  }
-  input::placeholder {
-    color: rgba(28, 28, 28, 0.3);
-    font-weight: light;
-  }
-  input:focus {
-    background-color: rgba(28, 28, 28, 0.14);
-  }
-  select {
-    border: 3px solid #1C1C1C; /* borde negro */
-    border-radius: 12px;
-    padding: 8px 5px;
-    background-color: #F8F4EC; /* beige */
-    margin-bottom: 0.8vh;
-    font-size: 16px;
-    color: #1C1C1C; /* texto negro */
-    box-sizing: border-box;
-    background-image: url('../assets/ChevronDownIcon.svg');
-    background-repeat: no-repeat;
-    background-position: calc(100% - 12px) center;
-    appearance: none;
-  }
-  select::placeholder {
-    color: rgba(28, 28, 28, 0.3);
-    font-weight: light;
-  }
-  select:focus {
-    background-color: rgba(28, 28, 28, 0.14);
-  }
-  textarea {
-    border: 3px solid #1C1C1C; /* borde negro */
-    border-radius: 12px;
-    padding: 8px 5px;
-    background-color: #F8F4EC; /* beige */
-    margin-bottom: 0.8vh;
-    font-size: 16px;
-    color: #1C1C1C; /* texto negro */
-    box-sizing: border-box;
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 25px 25px;
-  }
-  textarea::placeholder {
-    color: rgba(28, 28, 28, 0.3);
-    font-weight: light;
-  }
-  textarea:focus {
-    background-color: rgba(28, 28, 28, 0.14);
-  }
-  button {
-    width: 100%;
-    padding: 1.2vh 0;
-    border: 3px solid #1C1C1C; /* borde negro */
-    border-radius: 12px;
-    background-color: #1C1C1C; /* botón negro */
-    color: #F8F4EC;           /* texto beige */
-    font-weight: bold;
-    font-size: 16px;
-    display: flex;
-    justify-content: center;
-  }
-  button:hover {
-    background-color: #F8F4EC; /* beige */
-    color: #1C1C1C;             /* negro */
-    transition: 0.3s ease-out;
-  }
-  .footerContent {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-  }
-}
-
+/* Fondo con mandala + overlay suave */
 .container {
-  /* Fondo de la página en beige */
   height: 100vh;
-  background-color: #F8F4EC;
+  background:
+    linear-gradient(rgba(248,244,236,0.85), rgba(248,244,236,0.85)),
+    url('../assets/mandalafondo.png') center/cover no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
-.container_inputs {
+.form {
+  background-color: rgba(217,202,179,0.95); /* Dun semitransparente */
+  border-radius: 24px;
+  padding: 7vh;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow:
+    0 8px 16px rgba(0,0,0,0.2),
+    0 4px 8px rgba(0,0,0,0.15);
   position: relative;
-  margin-bottom: 5px;
 }
 
-input {
-  padding-right: 40px;
+/* Título */
+.form h1 {
+  color: #1C1C1C;     /* Eerie black */
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0 0 4vh;
+  text-align: center;
   width: 100%;
 }
 
+/* Contenedor de campos */
+.form .container_inputs {
+  position: relative;
+  width: 100%;
+  margin-bottom: 0.8vh;
+}
+
+/* Etiquetas */
+.form label {
+  color: #1C1C1C;
+  font-weight: bold;
+  margin-bottom: 0.7vh;
+  display: block;
+}
+
+/* Campos de entrada */
+.form input,
+.form select,
+.form textarea {
+  width: 100%;
+  padding: 8px 10px;
+  padding-right: 40px; /* espacio para el icono */
+  border: 3px solid #1C1C1C;
+  border-radius: 12px;
+  background-color: #F8F4EC;
+  font-size: 16px;
+  color: #1C1C1C;
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 25px 25px;
+}
+
+/* Icono mostrar/ocultar */
 .toggle-password-icon {
   position: absolute;
   right: 15px;
-  top: 44%;
+  top: 70%;
   transform: translateY(-50%);
   cursor: pointer;
   width: 25px;
   height: 25px;
+  fill: #1C1C1C;
 }
 
-.toggle-password-icon img {
-  width: 25px;
-  height: 25px;
-  margin-top: 4px;
+/* Placeholder */
+.form input::placeholder,
+.form select::placeholder,
+.form textarea::placeholder {
+  color: rgba(28,28,28,0.3);
+  font-weight: light;
 }
 
-/* Iconos en inputs no cambian */
+/* Focus */
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+  background-color: rgba(28,28,28,0.14);
+  outline: none;
+}
+
+/* Botón principal */
+.form button {
+  width: 100%;
+  padding: 1.2vh 0;
+  border: 3px solid #1C1C1C;
+  border-radius: 12px;
+  background-color: #1C1C1C;
+  color: #F8F4EC;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  transition: background 0.3s ease-out, transform 0.2s ease;
+  margin-top: 1rem;
+}
+
+/* Hover botón */
+.form button:hover {
+  background-color: #F8F4EC;
+  color: #1C1C1C;
+  transform: translateY(-2px);
+}
+
+/* Pie de formulario */
+.form .footerContent {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Iconos en inputs */
 input[type='email'] {
   background-image: url('../assets/MentionIcon.svg');
 }

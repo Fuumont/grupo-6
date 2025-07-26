@@ -21,7 +21,7 @@ export default function MovimientosTable({ data, onEdit, onDelete }) {
           <th>Fecha</th>
           <th>Monto</th>
           <th>Tipo</th>
-          <th>Usuario</th>
+          <th>Responsable</th>
           <th>Período</th>
           <th>Acciones</th>
         </tr>
@@ -32,7 +32,7 @@ export default function MovimientosTable({ data, onEdit, onDelete }) {
             <td>{m.descripcion}</td>
             {}
             <td>{formatDate(m.fecha)}</td>
-            <td>{Number(m.monto).toLocaleString("es-CL")}</td>
+            <td>{`$${Number(m.monto).toLocaleString("es-CL")}`}</td>
             <td className={`mt-tipo mt-tipo--${m.tipo}`}>
               {m.tipo === "ingreso" ? "+ ingreso" : "- egreso"}
             </td>

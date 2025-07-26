@@ -16,7 +16,6 @@ import {
   handleSuccess,
 } from "../handlers/responseHandlers.js";
 
-
 // Crear un nuevo periodo académico
 export async function createPeriodo(req, res) {
   try {
@@ -29,13 +28,25 @@ export async function createPeriodo(req, res) {
       return handleErrorClient(res, 400, errores);
     }
 
-    const [periodoCreado, errorServicio] = await createPeriodoService(value);
+    // Extraemos el id del usuario logueado (igual que en Movimientos)
+    const id_usuario = req.user.id;
+
+    // Pasamos el cuerpo validado y el id del usuario al servicio
+    const [periodoCreado, errorServicio] = await createPeriodoService(
+      value,
+      id_usuario
+    );
 
     if (errorServicio) {
       return handleErrorClient(res, 400, errorServicio);
     }
 
-    return handleSuccess(res, 201, periodoCreado, "Periodo creado exitosamente.");
+    return handleSuccess(
+      res,
+      201,
+      periodoCreado,
+      "Periodo creado exitosamente."
+    );
   } catch (error) {
     return handleErrorServer(res, 500, error.message);
   }
@@ -46,7 +57,9 @@ export async function getPeriodos(req, res) {
   try {
     const [periodos, errorServicio] = await getPeriodosService();
 
-    if (errorServicio) return handleSuccess(res, 200, [], errorServicio);
+    if (errorServicio) {
+      return handleSuccess(res, 200, [], errorServicio);
+    }
 
     return handleSuccess(res, 200, periodos, "Periodos encontrados.");
   } catch (error) {
@@ -63,7 +76,9 @@ export async function getPeriodo(req, res) {
     }
 
     const [periodo, errorServicio] = await getPeriodoService(parseInt(id));
-    if (errorServicio) return handleErrorClient(res, 404, errorServicio);
+    if (errorServicio) {
+      return handleErrorClient(res, 404, errorServicio);
+    }
 
     return handleSuccess(res, 200, periodo, "Periodo encontrado.");
   } catch (error) {
@@ -79,17 +94,33 @@ export async function updatePeriodo(req, res) {
       return handleErrorClient(res, 400, "ID inválido o no proporcionado.");
     }
 
-    const { error } = periodoValidation.validate(req.body);
+    const { error, value } = periodoValidation.validate(req.body, {
+      abortEarly: false,
+    });
     if (error) {
-      return handleErrorClient(res, 400, "Error de validación", error.message);
+      const mensajes = error.details.map((e) => e.message);
+      return handleErrorClient(res, 400, mensajes);
     }
 
-    const [periodoActualizado, errorServicio] = await updatePeriodoService(parseInt(id), req.body);
+    // Igual que en Movimientos, extraemos el usuario
+    const id_usuario = req.user.id;
+
+    // Pasamos el id, el cuerpo validado y el usuario al servicio
+    const [periodoActualizado, errorServicio] = await updatePeriodoService(
+      parseInt(id),
+      value,
+      id_usuario
+    );
     if (errorServicio) {
       return handleErrorClient(res, 400, errorServicio);
     }
 
-    return handleSuccess(res, 200, periodoActualizado, "Periodo actualizado correctamente.");
+    return handleSuccess(
+      res,
+      200,
+      periodoActualizado,
+      "Periodo actualizado correctamente."
+    );
   } catch (error) {
     return handleErrorServer(res, 500, error.message);
   }
@@ -103,12 +134,19 @@ export async function deletePeriodo(req, res) {
       return handleErrorClient(res, 400, "ID inválido o no proporcionado.");
     }
 
-    const [periodoEliminado, errorServicio] = await deletePeriodoService(parseInt(id));
+    const [periodoEliminado, errorServicio] = await deletePeriodoService(
+      parseInt(id)
+    );
     if (errorServicio) {
       return handleErrorClient(res, 404, errorServicio);
     }
 
-    return handleSuccess(res, 200, periodoEliminado, "Periodo eliminado correctamente.");
+    return handleSuccess(
+      res,
+      200,
+      periodoEliminado,
+      "Periodo eliminado correctamente."
+    );
   } catch (error) {
     return handleErrorServer(res, 500, error.message);
   }

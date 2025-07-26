@@ -46,7 +46,6 @@ export async function crearMovimientoService(data, userId) {
 
     // Validación de egresos obligando propuesta aprobada por DDE
     if (data.tipo === "egreso") {
-      // Detectamos el campo correcto (id_propuesta o propuestaId)
       const propuestaId = data.id_propuesta ?? data.propuestaId;
       if (!propuestaId) {
         return [null, "Para crear un egreso debes indicar una propuesta aprobada por la DDE."];
@@ -75,7 +74,7 @@ export async function crearMovimientoService(data, userId) {
       fecha:       fechaStr,
       usuario:     { id: userId },
       periodo:     { id: data.id_periodo },
-      propuesta:   (data.id_propuesta || data.propuestaId)
+      propuesta:   (data.id_propuesta ?? data.propuestaId)
                     ? { id: data.id_propuesta ?? data.propuestaId }
                     : null
     });
@@ -91,16 +90,24 @@ export async function crearMovimientoService(data, userId) {
 // Obtener todos los movimientos activos
 export async function getMovimientosService() {
   try {
-    const movimientos = await movimientoRepo.find({
-      where: { activo: true },
-      relations: ["usuario", "propuesta", "periodo"],
-      order: { id: "ASC" }
-    });
-    if (!movimientos.length) return [[], "No se encontraron movimientos"];
+    const movimientos = await movimientoRepo
+      .createQueryBuilder("m")
+      .leftJoinAndSelect("m.usuario", "usuario")
+      .leftJoinAndSelect("m.propuesta", "propuesta")
+      .leftJoinAndSelect("m.periodo", "periodo")
+      .where("m.activo = :activo", { activo: true })
+      .orderBy("m.id", "ASC")
+      .getMany();
 
-    const saldo = movimientos.reduce((acc, m) =>
-      m.tipo === "ingreso" ? acc + parseFloat(m.monto) : acc - parseFloat(m.monto),
-    0);
+    if (!movimientos.length) {
+      return [[], "No se encontraron movimientos"];
+    }
+
+    const saldo = movimientos.reduce(
+      (acc, m) =>
+        m.tipo === "ingreso" ? acc + parseFloat(m.monto) : acc - parseFloat(m.monto),
+      0
+    );
 
     const dataSanitizada = movimientos.map(m => ({
       id:          m.id,
@@ -224,20 +231,26 @@ export async function calcularSaldoService() {
   }
 }
 
-// Movimientos inactivos / restaurar
+// Obtener movimientos inactivos
 export async function getMovimientosInactivosService() {
   try {
-    const movs = await movimientoRepo.find({
-      where: { activo: false },
-      relations: ["usuario", "propuesta", "periodo"],
-      order: { id: "ASC" }
-    });
+    const movs = await movimientoRepo
+      .createQueryBuilder("m")
+      .leftJoinAndSelect("m.usuario",   "usuario")
+      .leftJoinAndSelect("m.propuesta", "propuesta")
+      .leftJoinAndSelect("m.periodo",   "periodo")
+      .where("m.activo = :activo", { activo: false })
+      .orderBy("m.id", "ASC")
+      .getMany();
+
     return [movs, null];
   } catch (error) {
     console.error("Error al obtener movimientos inactivos:", error);
     return [null, "Error interno del servidor"];
   }
 }
+
+// Restaurar movimiento
 export async function restoreMovimientoService(id) {
   try {
     const mov = await movimientoRepo.findOneBy({ id });
